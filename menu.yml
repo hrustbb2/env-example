@@ -1,0 +1,138 @@
+items:
+  1:
+    title: '1. Develop'
+    items:
+      1:
+        title: '1. Build'
+        env: 'dev'
+        commands: 
+          - 'docker-compose --project-name %(appName)s --file conf/docker/docker-compose_dev.yml build --no-cache'
+        vars:
+          - appName
+      2:
+        title: '2. Deploy and Up'
+        env: 'dev'
+        commands:
+          - 'mkdir -p data/mysql'
+          - 'mkdir -p app'
+          - 'mkdir -p cert'
+          - 'docker run -v %(currentDir)s/data/mysql:/var/lib/mysql -v %(currentDir)s/dumps:/home/dumps -v %(currentDir)s/conf/scripts/mysql:/home/scripts -it %(appName)s_db sh /home/scripts/initDB.sh'
+          - 'sh conf/scripts/deploy/dev.sh'
+          - 'docker network create -d bridge --subnet 192.168.0.0/24 --gateway 192.168.0.1 dockernet' 
+          - 'docker-compose --project-name %(appName)s --file conf/docker/docker-compose_dev.yml up --force-recreate -d'
+          - 'docker exec -it %(appName)s_php_1 sh /home/scripts/deploy_dev.sh'
+        vars:
+          - appName
+      3:
+        title: '3. Up'
+        env: 'dev'
+        commands: 
+          - 'docker network create -d bridge --subnet 192.168.0.0/24 --gateway 192.168.0.1 dockernet'
+          - 'docker-compose --project-name %(appName)s --file conf/docker/docker-compose_dev.yml up --force-recreate -d'
+        vars:
+          - appName
+      4:
+        title: '4. Stop'
+        env: 'dev'
+        commands: 
+          - 'docker-compose --project-name %(appName)s --file conf/docker/docker-compose_dev.yml stop'
+          - 'sleep 3'
+          - 'docker network rm dockernet'
+        vars:
+          - appName
+      5:
+        title: '5. Remove'
+        env: 'dev'
+        commands: 
+          - 'docker rm %(appName)s_php_1 --force'
+          - 'docker rm %(appName)s_db_1 --force'
+          - 'docker rm %(appName)s_nginx_1 --force'
+          - 'docker rmi %(appName)s_php --force'
+          - 'docker rmi %(appName)s_db --force'
+          - 'docker rmi %(appName)s_nginx --force'
+        vars:
+          - appName
+  2:
+    title: '2. Production'
+    items:
+      1:
+        title: '1. Build'
+        env: 'prod'
+        commands: 
+          - 'docker-compose --project-name %(appName)s --file conf/docker/docker-compose_prod.yml build --no-cache'
+        vars:
+          - appName
+      2:
+        title: '2. Deploy and Up'
+        env: 'prod'
+        commands:
+          - 'mkdir -p data/mysql'
+          - 'mkdir -p app'
+          - 'mkdir -p cert'
+          - 'docker run -v %(currentDir)s/data/mysql:/var/lib/mysql -v %(currentDir)s/dumps:/home/dumps -v %(currentDir)s/conf/scripts/mysql:/home/scripts -it %(appName)s_db sh /home/scripts/initDB.sh'
+          - 'sh conf/scripts/deploy/prod.sh'
+          - 'docker network create -d bridge --subnet 192.168.0.0/24 --gateway 192.168.0.1 dockernet' 
+          - 'docker-compose --project-name %(appName)s --file conf/docker/docker-compose_prod.yml up --force-recreate -d'
+          - 'docker exec -it %(appName)s_php_1 sh /home/scripts/deploy_prod.sh'
+        vars:
+          - appName
+      3:
+        title: '3. Up'
+        env: 'prod'
+        commands: 
+          - 'docker network create -d bridge --subnet 192.168.0.0/24 --gateway 192.168.0.1 dockernet'
+          - 'docker-compose --project-name %(appName)s --file conf/docker/docker-compose_prod.yml up --force-recreate -d'
+        vars:
+          - appName
+      4:
+        title: '4. Stop'
+        env: 'prod'
+        commands: 
+          - 'docker-compose --project-name %(appName)s --file conf/docker/docker-compose_prod.yml stop'
+          - 'sleep 3'
+          - 'docker network rm dockernet'
+        vars:
+          - appName
+      5:
+        title: '5. Remove'
+        env: 'prod'
+        commands: 
+          - 'docker rm %(appName)s_php_1 --force'
+          - 'docker rm %(appName)s_db_1 --force'
+          - 'docker rm %(appName)s_nginx_1 --force'
+          - 'docker rmi %(appName)s_php --force'
+          - 'docker rmi %(appName)s_db --force'
+          - 'docker rmi %(appName)s_nginx --force'
+        vars:
+          - appName
+  3:
+        title: '3. Certbot'
+        items:
+          1:
+            title: '1. Build'
+            env: 'cert'
+            commands:
+              - 'docker-compose --project-name %(appName)s --file conf/docker/docker-compose_cert.yml build --no-cache'
+          2:
+            title: '2. Up'
+            env: 'cert'
+            commands:
+              - 'docker-compose --project-name %(appName)s --file conf/docker/docker-compose_cert.yml up --force-recreate -d'
+          3:
+            title: '3. Stop'
+            env: 'cert'
+            commands:
+              - 'docker-compose --project-name %(appName)s --file conf/docker/docker-compose_cert.yml stop'
+          4:
+            title: '4. Remove'
+            env: 'cert'
+            commands:
+              - 'docker rm %(appName)s_nginx_1 --force'
+              - 'docker rmi %(appName)s_nginx --force'
+          5:
+            title: '5. Create Lets Encrypt cert'
+            env: 'cert'
+            commands:
+              - 'docker exec -it %(appName)s_nginx_1 sh /home/scripts/certbot.sh %(domainName)s'
+            vars:
+              - domainName
