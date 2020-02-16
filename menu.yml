@@ -113,22 +113,30 @@ items:
             env: 'cert'
             commands:
               - 'docker-compose --project-name %(appName)s --file conf/docker/docker-compose_cert.yml build --no-cache'
+            vars:
+              - appName
           2:
             title: '2. Up'
             env: 'cert'
             commands:
               - 'docker-compose --project-name %(appName)s --file conf/docker/docker-compose_cert.yml up --force-recreate -d'
+            vars:
+              - appName
           3:
             title: '3. Stop'
             env: 'cert'
             commands:
               - 'docker-compose --project-name %(appName)s --file conf/docker/docker-compose_cert.yml stop'
+            vars:
+              - appName
           4:
             title: '4. Remove'
             env: 'cert'
             commands:
               - 'docker rm %(appName)s_nginx_1 --force'
               - 'docker rmi %(appName)s_nginx --force'
+            vars:
+              - appName
           5:
             title: '5. Create Lets Encrypt cert'
             env: 'cert'
@@ -136,3 +144,4 @@ items:
               - 'docker exec -it %(appName)s_nginx_1 sh /home/scripts/certbot.sh %(domainName)s'
             vars:
               - domainName
+              - appName
