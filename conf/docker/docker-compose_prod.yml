@@ -30,7 +30,3 @@ services:
       - ../../dumps:/home/dumps
       - ../scripts/mysql:/home/scripts
     command: sh /home/scripts/start.sh
-networks:
-  default:
-    external:
-      name: dockernet

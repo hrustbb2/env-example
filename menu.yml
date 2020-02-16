@@ -71,7 +71,6 @@ items:
           - 'mkdir -p cert'
           - 'docker run -v %(currentDir)s/data/mysql:/var/lib/mysql -v %(currentDir)s/dumps:/home/dumps -v %(currentDir)s/conf/scripts/mysql:/home/scripts -it %(appName)s_db sh /home/scripts/initDB.sh'
           - 'sh conf/scripts/deploy/prod.sh'
-          - 'docker network create -d bridge --subnet 192.168.0.0/24 --gateway 192.168.0.1 dockernet' 
           - 'docker-compose --project-name %(appName)s --file conf/docker/docker-compose_prod.yml up --force-recreate -d'
           - 'docker exec -it %(appName)s_php_1 sh /home/scripts/deploy_prod.sh'
         vars:
@@ -80,7 +79,6 @@ items:
         title: '3. Up'
         env: 'prod'
         commands: 
-          - 'docker network create -d bridge --subnet 192.168.0.0/24 --gateway 192.168.0.1 dockernet'
           - 'docker-compose --project-name %(appName)s --file conf/docker/docker-compose_prod.yml up --force-recreate -d'
         vars:
           - appName
@@ -89,8 +87,6 @@ items:
         env: 'prod'
         commands: 
           - 'docker-compose --project-name %(appName)s --file conf/docker/docker-compose_prod.yml stop'
-          - 'sleep 3'
-          - 'docker network rm dockernet'
         vars:
           - appName
       5:
