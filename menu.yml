@@ -44,10 +44,12 @@ items:
         title: '5. Remove'
         env: 'dev'
         commands: 
-          - 'docker rm %(appName)s_php_1 --force'
+          - 'docker rm %(appName)s_php-cli_1 --force'
+          - 'docker rm %(appName)s_php-fpm_1 --force'
           - 'docker rm %(appName)s_db_1 --force'
           - 'docker rm %(appName)s_nginx_1 --force'
-          - 'docker rmi %(appName)s_php --force'
+          - 'docker rmi %(appName)s_php-cli --force'
+          - 'docker rmi %(appName)s_php-fpm --force'
           - 'docker rmi %(appName)s_db --force'
           - 'docker rmi %(appName)s_nginx --force'
         vars:

@@ -11,13 +11,27 @@ services:
       - ../scripts/nginx:/home/scripts
     ports:
       - 80:80
-  php:
+  php-cli:
     build:
-      context: ../../dockerfiles/php
+      context: ../../dockerfiles/php7.4-cli
       dockerfile: Dockerfile
+    user: "1000:1000"
+    environment:
+      - PHP_IDE_CONFIG=serverName=php
     volumes:
       - ../../app:/var/www/html
-      - ../scripts/php:/home/scripts
+      - ../scripts/php-cli:/home/scripts
+    command: sh /home/scripts/start.sh
+  php-fpm:
+    build:
+      context: ../../dockerfiles/php7.4-fpm
+      dockerfile: Dockerfile
+    user: "1000:1000"
+    environment:
+      - PHP_IDE_CONFIG=serverName=php
+    volumes:
+      - ../../app:/var/www/html
+      - ../scripts/php-fpm:/home/scripts
     command: sh /home/scripts/start.sh
   db:
     build:
