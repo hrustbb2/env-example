@@ -1,0 +1,63 @@
+items:
+    1:
+        title: '1. Build'
+        env: 'dev'
+        commands: 
+            - 'docker-compose --project-name %(appName)s --file conf/docker/docker-compose_dev.yml build --no-cache'
+        vars:
+            - appName
+    2:
+        title: '2. InitDB'
+        env: 'dev'
+        commands: 
+            - 'mkdir -p data/mysql'
+            - 'docker run -v %(currentDir)s/data/mysql:/var/lib/mysql -v %(currentDir)s/dumps:/home/dumps -v %(currentDir)s/conf/scripts/mysql:/home/scripts -it %(appName)s_db sh /home/scripts/initDB.sh'
+        vars:
+            - appName
+    3:
+        title: '3. Deploy and Up'
+        env: 'dev'
+        commands:
+            - 'mkdir -p app'
+            - 'docker network create -d bridge --subnet 192.168.0.0/24 --gateway 192.168.0.1 dockernet' 
+            - 'docker-compose --project-name %(appName)s --file conf/docker/docker-compose_dev.yml up --force-recreate -d'
+        vars:
+            - appName
+    4:
+        title: '4. Up'
+        env: 'dev'
+        commands: 
+            - 'docker network create -d bridge --subnet 192.168.0.0/24 --gateway 192.168.0.1 dockernet'
+            - 'docker-compose --project-name %(appName)s --file conf/docker/docker-compose_dev.yml up --force-recreate -d'
+        vars:
+            - appName
+    5:
+        title: '5. Stop'
+        env: 'dev'
+        commands: 
+            - 'docker-compose --project-name %(appName)s --file conf/docker/docker-compose_dev.yml stop'
+            - 'sleep 3'
+            - 'docker network rm dockernet'
+        vars:
+            - appName
+    6:
+        title: '6. Remove'
+        env: 'dev'
+        commands: 
+            - 'docker rm %(appName)s_php_1 --force'
+            - 'docker rm %(appName)s_db_1 --force'
+            - 'docker rm %(appName)s_nginx_1 --force'
+            - 'docker rm %(appName)s_nodejs_1 --force'
+            - 'docker rmi %(appName)s_php --force'
+            - 'docker rmi %(appName)s_db --force'
+            - 'docker rmi %(appName)s_nginx --force'
+            - 'docker rmi %(appName)s_nodejs --force'
+        vars:
+            - appName
+    7:
+        title: '7. Make Dump'
+        env: 'dev'
+        commands: 
+            - 'docker exec -it %(appName)s_db_1 sh /home/scripts/makeDump.sh dump.sql'
+        vars:
+            - appName

@@ -16,7 +16,7 @@ services:
   php:
     build:
       context: ../../dockerfiles/php
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile_prod
     volumes:
       - ../../app:/var/www/html
       - ../scripts/php:/home/scripts

@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:3.15
 COPY ./scripts/* /home/
 ENV PHP_IDE_CONFIG='serverName=php'
-RUN sh /home/install.sh
+RUN sh /home/install_dev.sh

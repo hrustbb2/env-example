@@ -2,6 +2,7 @@
 
 apt update
 apt install supervisor -y
+apt install nano
 
 echo "max_connections         = 100" >> /etc/mysql/mysql.conf.d/mysqld.cnf
 echo "connect_timeout         = 5" >> /etc/mysql/mysql.conf.d/mysqld.cnf
@@ -30,3 +31,7 @@ echo "innodb_file_per_table   = 1" >> /etc/mysql/mysql.conf.d/mysqld.cnf
 echo "innodb_open_files       = 400" >> /etc/mysql/mysql.conf.d/mysqld.cnf
 echo "innodb_io_capacity      = 400" >> /etc/mysql/mysql.conf.d/mysqld.cnf
 echo "innodb_flush_method     = O_DIRECT" >> /etc/mysql/mysql.conf.d/mysqld.cnf
+
+# echo "performance_schema      = ON" >> /etc/mysql/mysql.conf.d/mysqld.cnf
+# echo "show_compatibility_56   = ON" >> /etc/mysql/mysql.conf.d/mysqld.cnf
+# echo "sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION" >> /etc/mysql/mysql.conf.d/mysqld.cnf

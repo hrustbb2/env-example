@@ -1,0 +1,7 @@
+items:
+    1:
+      title: '1. Develop'
+      file: '/develop/menu.yml'
+    2:
+      title: '2. Production'
+      file: '/prod/menu.yml'
