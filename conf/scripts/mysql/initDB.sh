@@ -3,9 +3,9 @@
 if [ `ls /var/lib/mysql | wc -l` -eq 0 ];
 then
     DB_DATA_PATH="/var/lib/mysql"
-    DB_ROOT_PASS="mariadb_root_password"
-    DB_USER="mariadb_user"
-    DB_PASS="mariadb_user_password"
+    DB_ROOT_PASS="password"
+    DB_USER="user"
+    DB_PASS="password"
     DB_NAME="dbname"
 
     #su mysql -c "/usr/sbin/mysqld --initialize-insecure"
