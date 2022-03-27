@@ -30,6 +30,19 @@ services:
     ports:
       - 3306:3306
     command: sh /home/scripts/start.sh
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+        - 8080:8080
+  nodejs:
+    build:
+      context: ../../dockerfiles/nodejs
+      dockerfile: Dockerfile
+    volumes:
+      - ../scripts/nodejs:/home/scripts
+      - ../../app:/home/app
+    command: sh /home/scripts/start.sh
 networks:
   default:
     external:
