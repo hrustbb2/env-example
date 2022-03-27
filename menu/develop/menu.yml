@@ -19,8 +19,10 @@ items:
         env: 'dev'
         commands:
             - 'mkdir -p app'
+            - 'sh conf/scripts/deploy/dev.sh'
             - 'docker network create -d bridge --subnet 192.168.0.0/24 --gateway 192.168.0.1 dockernet' 
             - 'docker-compose --project-name %(appName)s --file conf/docker/docker-compose_dev.yml up --force-recreate -d'
+            - 'docker exec -it %(appName)s_php_1 /home/scripts/deploy_dev.sh'
         vars:
             - appName
     4:
