@@ -4,6 +4,6 @@ cp /home/scripts/.env_dev /var/www/html/.env
 cd /var/www/html
 composer install
 chmod -R 777 storage
-php artisan key:generate
-php artisan session:table
-php artisan migrate
+php8 artisan key:generate
+php8 artisan session:table
+php8 artisan migrate
