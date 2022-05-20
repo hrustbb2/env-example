@@ -10,6 +10,8 @@ sudo chmod +x /usr/local/bin/docker-compose
 sudo groupadd docker
 sudo gpasswd -a $USER docker
 
+sudo chown $USER /var/run/docker.sock
+
 sudo apt install python3
 sudo apt install python3-pip
 pip3 --no-cache-dir install pyyaml
