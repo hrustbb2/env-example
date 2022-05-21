@@ -19,6 +19,15 @@ services:
       - ../../app:/var/www/html
       - ../scripts/php:/home/scripts
     command: sh /home/scripts/start.sh
+  workspace:
+    build:
+      context: ../../dockerfiles/php
+      dockerfile: Dockerfile_dev
+    user: "${UID}"
+    volumes:
+      - ../../app:/var/www/html
+      - ../scripts/php:/home/scripts
+    command: sh /home/scripts/workspace.sh
   db:
     build:
       context: ../../dockerfiles/mysql

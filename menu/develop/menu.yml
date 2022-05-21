@@ -10,7 +10,6 @@ items:
         title: '2. InitDB'
         env: 'dev'
         commands: 
-            - 'mkdir -p data/mysql'
             - 'docker run -v %(currentDir)s/data/mysql:/var/lib/mysql -v %(currentDir)s/dumps:/home/dumps -v %(currentDir)s/conf/scripts/mysql:/home/scripts -it %(appName)s_db sh /home/scripts/initDB.sh'
         vars:
             - appName
@@ -18,11 +17,14 @@ items:
         title: '3. Deploy and Up'
         env: 'dev'
         commands:
+            - 'mkdir -p data/mysql'
             - 'mkdir -p app'
+            - 'docker run -v %(currentDir)s/data/mysql:/var/lib/mysql -v %(currentDir)s/dumps:/home/dumps -v %(currentDir)s/conf/scripts/mysql:/home/scripts -it %(appName)s_db sh /home/scripts/initDB.sh'
             - 'sh conf/scripts/deploy/dev.sh'
             - 'docker network create -d bridge --subnet 192.168.0.0/24 --gateway 192.168.0.1 dockernet' 
             - 'docker-compose --project-name %(appName)s --file conf/docker/docker-compose_dev.yml up --force-recreate -d'
-            - 'docker exec -it %(appName)s_php_1 sh /home/scripts/deploy_dev.sh'
+            # Деплоим бэкенд
+            - 'docker exec -it %(appName)s_php_1 sh /var/www/html/scripts/deploy_dev.sh'
         vars:
             - appName
     4:
@@ -47,17 +49,26 @@ items:
         env: 'dev'
         commands: 
             - 'docker rm %(appName)s_php_1 --force'
+            - 'docker rm %(appName)s_workspace_1 --force'
             - 'docker rm %(appName)s_db_1 --force'
             - 'docker rm %(appName)s_nginx_1 --force'
             - 'docker rm %(appName)s_nodejs_1 --force'
             - 'docker rmi %(appName)s_php --force'
+            - 'docker rmi %(appName)s_workspace --force'
             - 'docker rmi %(appName)s_db --force'
             - 'docker rmi %(appName)s_nginx --force'
             - 'docker rmi %(appName)s_nodejs --force'
         vars:
             - appName
     7:
-        title: '7. Make Dump'
+        title: '7. In workspace'
+        env: 'dev'
+        commands: 
+            - 'docker exec -it %(appName)s_workspace_1 sh'
+        vars:
+            - appName
+    8:
+        title: '8. Make Dump'
         env: 'dev'
         commands: 
             - 'docker exec -it %(appName)s_db_1 sh /home/scripts/makeDump.sh dump.sql'
