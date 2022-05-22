@@ -61,13 +61,20 @@ items:
         vars:
             - appName
     7:
-        title: '7. In workspace'
+        title: '7. In php workspace'
         env: 'dev'
         commands: 
             - 'docker exec -it %(appName)s_workspace_1 sh'
         vars:
             - appName
     8:
+        title: '8. In nodejs workspace'
+        env: 'dev'
+        commands: 
+            - 'docker exec -it %(appName)s_nodejs_1 /bin/bash'
+        vars:
+            - appName
+    9:
         title: '8. Make Dump'
         env: 'dev'
         commands: 
