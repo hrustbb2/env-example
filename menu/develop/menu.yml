@@ -23,7 +23,6 @@ items:
             - 'sh conf/scripts/deploy/dev.sh'
             - 'docker network create -d bridge --subnet 192.168.0.0/24 --gateway 192.168.0.1 dockernet' 
             - 'docker-compose --project-name %(appName)s --file conf/docker/docker-compose_dev.yml up --force-recreate -d'
-            # Деплоим бэкенд
             - 'docker exec -it %(appName)s_workspace_1 sh /home/scripts/deploy_dev.sh'
         vars:
             - appName

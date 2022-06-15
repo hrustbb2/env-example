@@ -14,5 +14,5 @@ sudo chown $USER /var/run/docker.sock
 
 sudo apt install python3
 sudo apt install python3-pip
-pip3 --no-cache-dir install pyyaml==5.4.1
+pip3 --no-cache-dir install pyyaml==5.3.1
 pip3 --no-cache-dir install configparser

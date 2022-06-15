@@ -71,10 +71,7 @@ class Menu():
             if os.path.isdir(currDir + '/menu'):
                 menuDir = '/menu'
             yaml_file = open(currDir + menuDir + ymlFile, "r")
-            try:
-                menu = yaml.load(yaml_file, Loader=yaml.FullLoader)
-            except:
-                menu = yaml.load(yaml_file)
+            menu = yaml.load(yaml_file, Loader=yaml.FullLoader)
             self.__items = menu['items']
         else:
             self.__items = items
